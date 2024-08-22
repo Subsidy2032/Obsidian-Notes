@@ -1,0 +1,13 @@
+- [x] dev.inlanefreight.local
+- [ ] vpn.inlanefreight.local
+- [x] monitoring.inlanefreight.local
+- [ ] blog.inlanefreight.local
+- [x] careers.inlanefreight.local
+- [x] gitlab.inlanefreight.local
+- [x] ir.inlanefreight.local
+- [x] tracking.inlanefreight.local
+- [x] status.inlanefreight.local
+- [x] support.inlanefreight.local
+- [ ] flag.inlanefreight.local
+- [ ] dnsadmin.inlanefreight.local
+- [x] shopdev2.inlanefreight.local

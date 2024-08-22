@@ -1,0 +1,96 @@
+{
+  "main": {
+    "id": "91ca1f183e5e6da1",
+    "type": "split",
+    "children": [
+      {
+        "id": "c8d5c6d736fcd0fc",
+        "type": "leaf",
+        "active": true,
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Chapter 2 - Windows Local PE/Practice Tasks/5 -VeraCrypt Disk Encryption.md",
+            "mode": "preview"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f4d472cfd84b4a9b",
+    "type": "split",
+    "children": [
+      {
+        "id": "7c0a0573b1b69ca1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7a36294f156d9dab",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "c7ef3faf3dac544c",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "da1cb9ce4cd5ca98",
+    "type": "split",
+    "children": [
+      {
+        "id": "ccd407c85d94b5e2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7fa90feec8a72909",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Chapter 2 - Windows Local PE/Practice Tasks/5 -VeraCrypt Disk Encryption.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "lastOpenFiles": [
+    "Chapter 2 - Windows Local PE/Practice Tasks/5 -VeraCrypt Disk Encryption.md",
+    "Chapter 2 - Windows Local PE/Practice Tasks/4 - BitLocker Disk Encryption.md",
+    "Chapter 2 - Windows Local PE/Practice Tasks/3 - Windows Defender Bypass.md",
+    "Chapter 2 - Windows Local PE/Practice Tasks/2 - Backdoor Creation.md",
+    "Chapter 2 - Windows Local PE/Practice Tasks/1 - Boot live OS.md",
+    "Chapter 2 - Windows Local PE/Practice Tasks/Untitled.md"
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "main": {
+    "id": "fc34ac504f7d4bb7",
+    "type": "split",
+    "children": [
+      {
+        "id": "eb3d52a560613795",
+        "type": "leaf",
+        "active": true,
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Chapter 8 - Advanced SQL Injection/Practice Tasks/2 - Time based & Bollean Based Enumeration.md",
+            "mode": "source"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "985b3db3699d9cbc",
+    "type": "split",
+    "children": [
+      {
+        "id": "e1322d393ac330a4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8d5d8c12036d991e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "2085bc1ae11d8007",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "1c77a77e15427c32",
+    "type": "split",
+    "children": [
+      {
+        "id": "607c56a0cfa8bf1e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "94ca5a7768e84bb3",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Chapter 8 - Advanced SQL Injection/Practice Tasks/2 - Time based & Bollean Based Enumeration.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "backlinkCollapsed": true,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "lastOpenFiles": [
+    "Chapter 8 - Advanced SQL Injection/Practice Tasks/2 - Time based & Bollean Based Enumeration.md",
+    "Chapter 8 - Advanced SQL Injection/Practice Tasks/3 - Website Enumeration.md",
+    "Chapter 7 - SQL Injection/Practice Tasks/3 - Preforming SQL Injections.md",
+    "Chapter 7 - SQL Injection/Practice Tasks/2 - Boolean Based Login Bypass.md",
+    "Chapter 12 - LFI & RFI to RCE/Practice Tasks/4 - Unrestricted File Upload.md",
+    "Chapter 12 - LFI & RFI to RCE/Practice Tasks/3 - RFI.md",
+    "Chapter 12 - LFI & RFI to RCE/Practice Tasks/2 - Abusing File Streams.md",
+    "Chapter 12 - LFI & RFI to RCE/Practice Tasks/1 - LFI.md",
+    "Chapter 12 - LFI & RFI to RCE/Practice Tasks/5 - Website Enumeration.md",
+    "Chapter 12 - LFI & RFI to RCE/Practice Tasks/6 - Log Poisoning.md"
+  ]
+}

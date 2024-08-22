@@ -1,0 +1,1 @@
+Simple SQL injection - d' OR 1=1 -- -

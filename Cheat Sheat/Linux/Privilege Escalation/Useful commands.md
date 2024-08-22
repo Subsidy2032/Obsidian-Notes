@@ -1,0 +1,1 @@
+Check for commands you can run as sudo: `sudo -l`

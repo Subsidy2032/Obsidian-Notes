@@ -1,0 +1,2 @@
+- Network range: `172.16.5.0/24`
+- Domain: `INLANEFREIGHT.LOCAL`

@@ -1,0 +1,165 @@
+{
+  "main": {
+    "id": "1c578b9c5e7d3c05",
+    "type": "split",
+    "children": [
+      {
+        "id": "c1ec7fdcc49fbcb5",
+        "type": "leaf",
+        "active": true,
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Resources/Private/Financial/Finances MOC.md",
+            "mode": "preview"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "4f88c443794a3546",
+    "type": "split",
+    "children": [
+      {
+        "id": "dc633b6eb5f8a918",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e1edc6f7269adf07",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "9dccd69eea8d1950",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "773f477b0a23d613",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          },
+          {
+            "id": "7880bd61ca12675a",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 331.5036334991455
+  },
+  "right": {
+    "id": "3daf49910a155d14",
+    "type": "split",
+    "children": [
+      {
+        "id": "024e91f4a0db8bec",
+        "type": "tabs",
+        "dimension": 42.840375586854464,
+        "children": [
+          {
+            "id": "23fb0d33956f080c",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Resources/Private/Financial/Finances MOC.md"
+              }
+            }
+          },
+          {
+            "id": "75ab9babeddd6d96",
+            "type": "leaf",
+            "state": {
+              "type": "localgraph",
+              "state": {
+                "file": "Resources/Private/Financial/Finances MOC.md",
+                "options": {
+                  "search": "",
+                  "localJumps": 1,
+                  "localBacklinks": true,
+                  "localForelinks": true,
+                  "localInterlinks": false,
+                  "showTags": false,
+                  "showAttachments": false,
+                  "hideUnresolved": false,
+                  "showArrow": false,
+                  "textFadeMultiplier": 0,
+                  "nodeSizeMultiplier": 1,
+                  "lineSizeMultiplier": 1,
+                  "centerStrength": 0.518713248970312,
+                  "repelStrength": 10,
+                  "linkStrength": 1,
+                  "linkDistance": 250,
+                  "scale": 0.42394446476252096
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "37926a7fa6c85ba5",
+        "type": "tabs",
+        "dimension": 57.159624413145536,
+        "children": [
+          {
+            "id": "34f6d28847a9b784",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Resources/Private/Financial/Finances MOC.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 310.97711181640625
+  },
+  "lastOpenFiles": [
+    "Resources/Private/Financial/Finances MOC.md",
+    "Resources/People/Douglas R. Hofstadter.md",
+    "Resources/Images/LYT Kit/warehouse2.jpg",
+    "Resources/Images/LYT Kit/stay on target.jpg",
+    "Resources/Images/LYT Kit/Map_Wall_blog.jpg",
+    "Resources/Images/LYT Kit/Craft3.png",
+    "Resources/Images/Flow/Four Factors of Flow.png",
+    "Resources/Images/Flow/Flow Map - Original.jpg",
+    "Resources/Images/Flow/Flow Map.png",
+    "Sources/S- 2020 - Speech - AnalogyCore - Hofstadter2009.md"
+  ]
+}

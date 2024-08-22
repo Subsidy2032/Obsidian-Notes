@@ -1,0 +1,102 @@
+{
+  "main": {
+    "id": "881319d40e14c2e1",
+    "type": "split",
+    "children": [
+      {
+        "id": "44486a298eff30e2",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Web Application Penetration Testing/Chapter 7 - SQL Injection/Practice Tasks/3 - Preforming SQL Injections.md",
+            "mode": "source"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "69002229797f8d2a",
+    "type": "split",
+    "children": [
+      {
+        "id": "61f359f9b7a31143",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e9ed40f56e9edb9d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "78ec056a5ba1565d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "fe596219855dabb9",
+    "type": "split",
+    "children": [
+      {
+        "id": "dee9e35988e6fb0a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e81f6cd8e5dec958",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Web Application Penetration Testing/Chapter 7 - SQL Injection/Practice Tasks/3 - Preforming SQL Injections.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "44486a298eff30e2",
+  "lastOpenFiles": [
+    "Web Application Penetration Testing/Chapter 7 - SQL Injection/Practice Tasks/3 - Preforming SQL Injections.md",
+    "Web Application Penetration Testing/Chapter 7 - SQL Injection/Practice Tasks/2 - Boolean Based Login Bypass.md",
+    "Web Application Penetration Testing/Chapter 7 - SQL Injection/Practice Tasks/1 - Setting Up the Enviroment.md",
+    "Untitled.md",
+    "Pasted image 20210227224433.png",
+    "Advanced Infrastructure Attacks/Chapter 4 - SMB Relay & Responder/Practice Tasks/4 - Responder Advanced Attack.md",
+    "Advanced Infrastructure Attacks/Chapter 4 - SMB Relay & Responder/Practice Tasks/3 - SMB Relay.md",
+    "Advanced Infrastructure Attacks/Chapter 4 - SMB Relay & Responder/Practice Tasks/2 - Responder NTLMv2 Cracking.md",
+    "Advanced Infrastructure Attacks/Chapter 4 - SMB Relay & Responder/Practice Tasks/1 - Capturing LLMNR.md",
+    "Some image.png"
+  ]
+}

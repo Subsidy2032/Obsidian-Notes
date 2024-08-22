@@ -1,0 +1,242 @@
+{
+  "main": {
+    "id": "357b0562b5688104",
+    "type": "split",
+    "children": [
+      {
+        "id": "297ce4f397f9a451",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "46a032eb06d456ab",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Attacks/Web/File Inclusion/Local File Inclusion (LFI)/Basics.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "33b4f1ff95537b7d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Attacks/Web/File Upload/Other Upload Attacks/Limited File Uploads.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "fa7254c265e75a76",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Enumeration/Web/FFUF.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "32814efc874f0fe6",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Challenges/Attachments/Pasted image 20240513114932.png"
+              }
+            }
+          },
+          {
+            "id": "6c0f34b612c93ef9",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Challenges/Attachments/Pasted image 20240513114932.png"
+              }
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6617d747232d7957",
+    "type": "split",
+    "children": [
+      {
+        "id": "4e610afd5f9830fc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1f33db38225985a3",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "byCreatedTimeReverse"
+              }
+            }
+          },
+          {
+            "id": "65a0e0c6ca91022f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "_",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "9646412115e20b0a",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 290.5
+  },
+  "right": {
+    "id": "2c581169ff49455c",
+    "type": "split",
+    "children": [
+      {
+        "id": "34543abe78f92ab8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5e3b271c7780b977",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Enumeration/Web/FFUF.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "8e4f6bd4a7a04688",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Enumeration/Web/FFUF.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "d99944aa8ee060cd",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "2f98a16cc4bc1aa6",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Enumeration/Web/FFUF.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 291.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "fa7254c265e75a76",
+  "lastOpenFiles": [
+    "Attacks/Web/File Upload/Basic Exploitation.md",
+    "Attacks/Web/File Upload/Bypassing Filters/Blacklist Filters.md",
+    "Attacks/Web/File Upload/Bypassing Filters/Whitelist Filters.md",
+    "Attacks/Web/File Upload/Bypassing Filters/Client-Side Validation.md",
+    "Attacks/Linux/Privilege Escalation/Recent 0-Days/Sudo.md",
+    "Attacks/Linux/Privilege Escalation/Permissions Based/Special Permissions.md",
+    "Attacks/Linux/Privilege Escalation/Permissions Based/Sudo Rights Abuse.md",
+    "Attacks/Linux/Privilege Escalation/Service Based/Cron Job Abuse.md",
+    "Attacks/Linux/Privilege Escalation/Service Based/Vulnerable Services.md",
+    "Attacks/Linux/Privilege Escalation/Permissions Based/Capabilties.md",
+    "Attacks/Linux/Privilege Escalation/Permissions Based/Privileged Groups.md",
+    "Attacks/Linux/Privilege Escalation/Linux Internals Based/Kernel Exploits.md",
+    "Attacks/Linux/Privilege Escalation/Information Gathering/Linux Services and Internal Enumeration.md",
+    "Attacks/Linux/Privilege Escalation/Information Gathering/Environment Enumeration.md",
+    "Attacks/Linux/Privilege Escalation/Environment Based/Wildcard Abuse.md",
+    "Attacks/Linux/Privilege Escalation/Linux Hardening.md",
+    "Attacks/Linux/Privilege Escalation/Introduction.md",
+    "Attacks/Linux/Privilege Escalation/Service Based/Miscellaneous Techniques.md",
+    "Attacks/Linux/Privilege Escalation/Service Based/Logrotate.md",
+    "Attacks/Linux/Privilege Escalation/Service Based/Kubernetes.md",
+    "Attacks/Linux/Privilege Escalation/Service Based/Docker.md",
+    "Attacks/Linux/Privilege Escalation/Service Based/LXD.md",
+    "Attacks/Linux/Privilege Escalation/Environment Based/Escaping Restricted Shells.md",
+    "Attacks/Linux/Privilege Escalation/Environment Based/Path Abuse.md",
+    "Attacks/Linux/Privilege Escalation/Linux Internals Based/Python Library Hijacking.md",
+    "Attacks/Linux/Privilege Escalation/Linux Internals Based/Shared Object Hijacking.md",
+    "Challenges/Attachments/Pasted image 20240513114932.png",
+    "Attachments/Pasted image 20240505205237.png",
+    "Challenges/Windows Privilege Escalation",
+    "Challenges/Web Attacks",
+    "Challenges/SQLMap",
+    "Challenges/Password Attacks",
+    "Challenges/Linux Privilege Escalation",
+    "Challenges/Footprinting",
+    "Challenges/Attacking Common Applications",
+    "Challenges/Attachments/Pasted image 20240622214511.png",
+    "Challenges/Attachments/Pasted image 20240622214418.png",
+    "Challenges/Attachments/Pasted image 20240622214305.png",
+    "Challenges/Attachments/Pasted image 20240621173722.png",
+    "Challenges/Attachments/Pasted image 20240621173653.png",
+    "Challenges/Attachments/Pasted image 20240621173157.png",
+    "Challenges/Attachments/Pasted image 20240621173008.png",
+    "Challenges/Attachments/Pasted image 20240621145040.png",
+    "Challenges/Attachments",
+    "Challenges/Active Directory/Skills Assessment Part 2",
+    "Challenges/Active Directory/Skills Assessment Part 1"
+  ]
+}
