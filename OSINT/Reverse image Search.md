@@ -1,0 +1,3 @@
+- Bing
+- Yandex
+- TinEye
